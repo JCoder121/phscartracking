@@ -1,16 +1,29 @@
+#error -215
+#anirudh's filming perspective- much better and will be more accurate than jeff's
+#computer will count the cars passing up this time (different point of view)
 #source: https://github.com/jorgem0/traffic_counter/blob/master/traffic_counter.py
+
 
 '''
 notes section: right now it is counting people as well
 make blue boxes only in the road area, not to the trees at the side
 
+new note: inside each blue box for object, there is a green box with a
+red dot in the middle, and when this red dot crosses the green (count) line,
+carscrossedup will increment (only when it is visible that this red dot
+crosses the line)
+*be careful of multiple boxes = multiple red dots associated with one car
 '''
 
 import numpy as np
 import cv2
 import pandas as pd
 
-cap = cv2.VideoCapture('ani_movie_best.mp4')
+#user file path to the film (not included in the same dir as code)
+#organization purposes
+#ani if you use this check if your video is in the same exact folder as the code, if it is, just put the video name
+#if not, you'll have to write out the entire path to the video file for the computer to open
+cap = cv2.VideoCapture('/Users/jeffrey/Documents/PYTHONCAR/film/car_film_6_7.mp4')
 frames_count, fps, width, height = cap.get(cv2.CAP_PROP_FRAME_COUNT), cap.get(cv2.CAP_PROP_FPS), cap.get(
     cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 width = int(width)
@@ -72,9 +85,9 @@ while True:
 
         # line created to stop counting contours, needed as cars in distance become one big contour
         #line y position for the contour DECOUNT
-        lineypos = 150
+        lineypos = 350
         #for both, can use width for the entire width of the window
-        cv2.line(image, (200, lineypos), (550, lineypos), (255, 0, 0), 5)
+        cv2.line(image, (100, lineypos), (550, lineypos), (255, 0, 0), 5)
 
         # line y position created to count contours
         #height y for the line contour COUNT to be
@@ -82,7 +95,7 @@ while True:
         #original: cv2.line(image, (0, lineypos2), (width, lineypos2), (0, 255, 0), 5)
         #cv2.line(image(important just write image), start(x,y), end(x,y) , (B-G-R color set), line thickness)
 
-        cv2.line(image, (200, lineypos2), (550, lineypos2), (0, 255, 0), 5)
+        cv2.line(image, (100, lineypos2), (550, lineypos2), (0, 255, 0), 5)
 
         # min area for contours in case a bunch of small noise contours are created
         #CHANGE THIS AND SEE IF THE BIGGER ONES CAN FILTER OUT THE PEOPLE, SEE HOW HIGH IT CAN GO
@@ -385,6 +398,7 @@ cv2.destroyAllWindows()
 #again, probably not needed
 #df.to_csv('traffic.csv', sep=',')
 
-print("cars passed:", carscrosseddown)
-#print("cars per minute: %0.2f" % carscrosseddown/60)
+print("cars passed up:", carscrossedup)
+#string formatting for python and numbers
+#print("cars per minute: %0.2f" % carscrossedup/60)
 print('done')
